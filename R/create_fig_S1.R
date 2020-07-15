@@ -2,6 +2,7 @@
 ### Supplementary Figure - sup fig 1 bubble plot - change in scores 
 create_fig_S1 <- function (all.moca) {
   
+  extrafont::loadfonts()
   all.moca$diff1 <- with(all.moca, moca_score_mo3 - moca_score_w1)
   all.moca$diff2 <- with(all.moca, moca_score_mo12 - moca_score_mo3)
   all.moca$moca_impaired_w1 <- ifelse(
