@@ -1,10 +1,34 @@
-binomial_regression <- function (categorized_moca,
+collate_binomial_regressions <- function (categorized_moca,
+                                          selected_variables) {
+  
+  w1 <- fit_binomial_regression(categorized_moca,
+                                selected_variables,
+                                'impaired_w1')
+  mo3 <- fit_binomial_regression(categorized_moca,
                                  selected_variables,
-                                 response_variable) {
+                                 'impaired_mo3',
+                                 'moca_score_w1')
+  mo12 <- fit_binomial_regression(categorized_moca,
+                                  selected_variables,
+                                  'impaired_mo12',
+                                  'moca_score_w1')
+  
+  blm <- rbind(w1, "", mo3, "", mo12) %>% 
+    filter(p.value < .05) %>% 
+    mutate(p.value = ifelse(p.value!="" & p.value < 0.001, 
+                            "<.001", p.value))
+  
+}
+
+fit_binomial_regression <- function (categorized_moca,
+                                     selected_variables,
+                                     response_variable,
+                                     other_variables = NULL) {
   
   data <- categorized_moca %>% 
-    select(response_variable,
-           all_of(selected_variables)) %>%
+    select(all_of(response_variable),
+           all_of(selected_variables),
+           all_of(other_variables)) %>%
     na.omit()
   
   .ORs <- lapply(names(data)[-1],
