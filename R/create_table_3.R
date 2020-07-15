@@ -10,8 +10,9 @@ create_table_3 <- function (moca_with_trends,
     select(all_of(table3_columns)) %>% 
     group_by(trends) %>%
     summarise_if(is.numeric, 
-                 funs(sum(!is.na(.)), median, IQR), 
-                 na.rm = TRUE)
+                 list(~ sum(., na.rm = TRUE), 
+                      ~ median(., na.rm = TRUE), 
+                      ~ IQR(., na.rm = TRUE)))
   
   ### getting descriptive stats for all variables
   counts <- names(t3)[grep("sum", names(t3))]
