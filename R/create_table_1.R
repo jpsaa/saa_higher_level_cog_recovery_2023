@@ -42,12 +42,12 @@ table1_cont_vars <- function (all.moca, moca.base,
     select(n, median, IQR)
   
   comp.num <- all.moca %>%
-    select(.cont.vars) %>%
+    select(all_of(.cont.vars)) %>%
     describe(IQR = TRUE) %>%
     select(n, median, IQR)
   
   incomp.num <- moca.incomp %>%
-    select(.cont.vars) %>%
+    select(all_of(.cont.vars)) %>%
     describe(IQR = TRUE) %>%
     select(n, median, IQR)
   
@@ -116,7 +116,7 @@ table1_count_vars <- function (all.moca, moca.base,
   all.base <- all.base[-which(trimws(all.base[, 1]) == "NA's"), ]
   
   comp <- all.moca %>%
-    select(.freqs) %>%
+    select(all_of(.freqs)) %>%
     summary() %>% 
     strsplit(":") %>% 
     data.frame() %>% 
@@ -126,7 +126,7 @@ table1_count_vars <- function (all.moca, moca.base,
   comp <- comp[-which(trimws(comp[, 1]) == "NA's"), ]
   
   incomp <- moca.incomp %>%
-    select(.freqs) %>%
+    select(all_of(.freqs)) %>%
     summary() %>% 
     strsplit(":") %>% 
     data.frame() %>% 
