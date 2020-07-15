@@ -37,7 +37,7 @@ table1_cont_vars <- function (all.moca, moca.base,
                               moca.incomp, .cont.vars) {
   
   all.base <- moca.base %>%
-    select(.cont.vars) %>%
+    select(all_of(.cont.vars)) %>%
     describe(IQR = TRUE) %>%
     select(n, median, IQR)
   
@@ -106,7 +106,7 @@ table1_count_vars <- function (all.moca, moca.base,
   
   #### table comparing those with and without complete moca scores
   all.base <- moca.base %>%
-    select(.freqs) %>%
+    select(all_of(.freqs)) %>%
     summary() %>% 
     strsplit(":") %>% 
     data.frame() %>% 
