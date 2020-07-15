@@ -7,7 +7,7 @@ create_table_3 <- function (moca_with_trends,
            moca_score_mo12, trends)
   
   t3 <- moca_with_trends %>% 
-    select(table3_columns) %>% 
+    select(all_of(table3_columns)) %>% 
     group_by(trends) %>%
     summarise_if(is.numeric, 
                  funs(sum(!is.na(.)), median, IQR), 
@@ -62,7 +62,7 @@ create_table_3 <- function (moca_with_trends,
             'aerobic', 'acs', 'wsas', 'sis')
   .t3 <- matrix(ncol = ncol(table3))
   
-  grab = 1
+  grab <- 1
   
   for (i in seq_along(cols)) {
     
