@@ -2,10 +2,6 @@
 create_table_3 <- function (moca_with_trends,
                             table3_columns) {
   
-  moca <- moca_with_trends %>% 
-    select(id, moca_score_w1, moca_score_mo3,
-           moca_score_mo12, trends)
-  
   t3 <- moca_with_trends %>% 
     select(all_of(table3_columns)) %>% 
     group_by(trends) %>%
