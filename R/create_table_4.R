@@ -1,13 +1,13 @@
 #### Table 4 - overall improvers and improved declined
 
-create_table_4 <- function (moca_with_trends,
-                            table3_columns) {
+create_table_4 <- function (data,
+                            columns) {
  
-  sga <- moca_with_trends %>% 
+  sga <- data %>% 
     filter(trends == "1.overall improver" | 
              trends == "3.improved-declined") %>%
     select(trends, gender_w1, educ_binary, 
-           marital_status_binary_w1, disab_prestroke, all_of(table3_columns))
+           marital_status_binary_w1, disab_prestroke, all_of(columns))
   
   sga.desc <- sga %>% 
     group_by(trends) %>%
@@ -94,11 +94,11 @@ create_table_4 <- function (moca_with_trends,
   table4[, 1] <- trimws(gsub("median|t0|.y|_", " ", table4[, 1]))
   
   ##### comparison overall improver vs overall decliner
-  sga2 <- moca_with_trends %>% 
+  sga2 <- data %>% 
     filter(trends == "1.overall improver" | 
              trends == "9.overall decliner") %>%
     select(trends, gender_w1, educ_binary, 
-           marital_status_binary_w1, disab_prestroke, all_of(table3_columns))
+           marital_status_binary_w1, disab_prestroke, all_of(columns))
   
   sga.desc <- sga2 %>% 
     group_by(trends) %>%

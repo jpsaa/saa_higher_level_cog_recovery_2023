@@ -1,7 +1,7 @@
 #### MoCA change (for figure 2 (trajectory map) and tables 3 and 4)
-add_moca_trends <- function (all.moca) {
+add_moca_trends <- function (data) {
   
-  moca_with_trends <- all.moca %>%
+  moca_with_trends <- data %>%
     mutate(trends =
              ifelse(
                moca_score_mo12 > moca_score_mo3 &

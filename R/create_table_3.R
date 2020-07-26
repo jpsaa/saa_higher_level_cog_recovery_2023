@@ -1,9 +1,9 @@
 ### Table 3
-create_table_3 <- function (moca_with_trends,
-                            table3_columns) {
+create_table_3 <- function (data,
+                            columns) {
   
-  t3 <- moca_with_trends %>% 
-    select(all_of(table3_columns)) %>% 
+  t3 <- data %>% 
+    select(all_of(columns)) %>% 
     group_by(trends) %>%
     summarise_if(is.numeric, 
                  list(~ sum(., na.rm = TRUE), 
@@ -37,11 +37,11 @@ create_table_3 <- function (moca_with_trends,
   table3 <- t(table3)
   
   table3 <- rbind(
-    get_stats(moca_with_trends, id),
-    get_stats(moca_with_trends, gender_w1, "male"),
-    get_stats(moca_with_trends, educ_binary, "secondary or more"),
-    get_stats(moca_with_trends, marital_status_binary_w1, "married"),
-    get_stats(moca_with_trends, disab_prestroke, "some disab"),
+    get_stats(data, id),
+    get_stats(data, gender_w1, "male"),
+    get_stats(data, educ_binary, "secondary or more"),
+    get_stats(data, marital_status_binary_w1, "married"),
+    get_stats(data, disab_prestroke, "some disab"),
     table3)
   colnames(table3) <- unlist(t3[, 1])
   
@@ -100,7 +100,7 @@ get_stats <- function (x, var, categ = NULL) {
       unlist
     
     paste0(.nums, ' (', 
-           round(.nums / nrow(moca_with_trends) * 100, 2),
+           round(.nums / nrow(x) * 100, 2),
            "%)")
     
   } else {
@@ -116,7 +116,7 @@ get_stats <- function (x, var, categ = NULL) {
       round(
         ((x %>% group_by(trends) %>% select(trends) %>%
             summarize(var = n()) %>% select(var) %>% 
-            unlist()) / nrow(moca_with_trends)) * 100, 2),
+            unlist()) / nrow(x)) * 100, 2),
       "%)")
   }
 }

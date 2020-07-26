@@ -1,17 +1,17 @@
-collate_binomial_regressions <- function (categorized_moca,
+collate_binomial_regressions <- function (data,
                                           selected_variables) {
   
-  w1 <- fit_binomial_regression(categorized_moca,
+  w1 <- fit_binomial_regression(data,
                                 selected_variables,
-                                'impaired_w1')
-  mo3 <- fit_binomial_regression(categorized_moca,
+                                response_variable = 'impaired_w1')
+  mo3 <- fit_binomial_regression(data,
                                  selected_variables,
-                                 'impaired_mo3',
-                                 'moca_score_w1')
-  mo12 <- fit_binomial_regression(categorized_moca,
+                                 response_variable = 'impaired_mo3',
+                                 other_variables = 'moca_score_w1')
+  mo12 <- fit_binomial_regression(data,
                                   selected_variables,
-                                  'impaired_mo12',
-                                  'moca_score_w1')
+                                  response_variable = 'impaired_mo12',
+                                  other_variables = 'moca_score_w1')
   
   blm <- rbind(w1, "", mo3, "", mo12) %>% 
     filter(p.value < .05) %>% 
@@ -20,23 +20,23 @@ collate_binomial_regressions <- function (categorized_moca,
   
 }
 
-fit_binomial_regression <- function (categorized_moca,
+fit_binomial_regression <- function (data,
                                      selected_variables,
                                      response_variable,
                                      other_variables = NULL) {
   
-  data <- categorized_moca %>% 
+  subsetted_data <- data %>% 
     select(all_of(response_variable),
            all_of(selected_variables),
            all_of(other_variables)) %>%
     na.omit()
   
-  .ORs <- lapply(names(data)[-1],
+  .ORs <- lapply(names(subsetted_data)[-1],
                  function (var) {
                    formula <- as.formula(
                      paste(response_variable, " ~", var))
                    res.logist <- glm(formula, 
-                                     data = data, 
+                                     data = subsetted_data, 
                                      family = binomial)
                    # summary(res.logist, digits = 3)
                    # confint(res.logist)
