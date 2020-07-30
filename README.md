@@ -2,13 +2,14 @@
 
 This repository contains code needed to reproduce the article:
 
-**Saa JP, Tse T, Baum C, Uribe D, Windecker S, Carey T**. "Trajectory and factors impacting cognitive recovery", (in prep)
+**Saa JP, Tse T, Baum C, Uribe D, Windecker S, Carey T**. "Trajectory and factors impacting cognitive recovery", (in prep).
 
+This badge doesn't function yet, but if you preserve the data somewhere, we can add it here. 
 [![DOI](https://zenodo.org/badge/11128/RemkoDuursma/baadanalysis.svg)](https://zenodo.org/badge/latestdoi/11128/RemkoDuursma/baadanalysis)
 
 ## Running the code
 
-All analyses were done in `R`, and the paper is written in LaTeX. All code needed to reproduce the submitted products is included in this repository. To reproduce the results in this paper, run the code contained in the `analysis.R` file. Figures, tables, and other results will be output to respective directories and the paper and supplementary materials can be found in the directory `ms`.
+All analyses were done in `R`. All code needed to reproduce the submitted products is included in this repository. To reproduce the results in this paper, run the code contained in the `analysis.R` file. Figures, tables, and other results will be output to respective directories and the paper and supplementary materials can be found in the directory `ms`.
 
 If you are reproducing these results on your own machine, first download the code and then install the required packages listed in the `DESCRIPTION` file. This can be achieved by opening the Rstudio project and running:
 
@@ -40,30 +41,30 @@ If you have Docker installed, you can recreate the computing environment as foll
 From the directory you'd like this repo saved in, clone the repository:
 
 ```
-git clone https://github.com/traitecoevo/baadanalysis.git
+git clone https://github.com/smwindecker/saa_cog_recovery_2020.git
 ```
 
 Then fetch the container:
 
 ```
-docker pull traitecoevo/baadanalysis
+docker pull smwindecker/saa_cog_recovery_2020
 ```
 
 Navigate to the downloaded repo, then launch the container using the following code (it will map your current working directory inside the docker container): 
 
 ```
-docker run --user root -v $(pwd):/home/rstudio/ -p 8787:8787 -e DISABLE_AUTH=true traitecoevo/baadanalysis
+docker run --user root -v $(pwd):/home/rstudio/ -p 8787:8787 -e DISABLE_AUTH=true smwindecker/saa_cog_recovery_2020
 ```
 
 The code above initialises a docker container, which runs an RStudio session accessed by pointing your browser to [localhost:8787](http://localhost:8787). For more instructions on running docker, see the info from [rocker](https://hub.docker.com/r/rocker/rstudio).
 
 ### NOTE: Building the docker image
 
-For posterity, the docker image was built off [`rocker/verse:3.6.1` container](https://hub.docker.com/r/rocker/verse) via the following command, in a terminal contained within the downloaded repo:
+For posterity, the docker image was built off [`rocker/verse:3.5.1` container](https://hub.docker.com/r/rocker/verse) via the following command, in a terminal contained within the downloaded repo:
 
 ```
-docker build -t traitecoevo/baadanalysis .
+docker build -t smwindecker/saa_cog_recovery_2020 .
 ```
 
-and was then pushed to [dockerhub](https://cloud.docker.com/u/traitecoevo/repository/docker/traitecoevo/baadanalysis). The image used by binder builds off this container, adding extra features needed by binder, as described in [rocker/binder](https://hub.docker.com/r/rocker/binder/dockerfile).
+and was then pushed to [dockerhub](https://cloud.docker.com/u/smwindecker/repository/docker/smwindecker/saa_cog_recovery_2020). The image used by binder builds off this container, adding extra features needed by binder, as described in [rocker/binder](https://hub.docker.com/r/rocker/binder/dockerfile).
 
