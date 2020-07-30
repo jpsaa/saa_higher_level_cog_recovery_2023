@@ -12,7 +12,7 @@ fit_model <- function (pid, formula, data) {
     set.seed(1)
     
     mod.glmer <- glmer(
-      formula(trimws(paste("moca_score_gamma ~ ",
+      formula(trimws(paste("moca.score.gamma ~ ",
                            formula, 
                            "+ moca_baseline_gamma + (1 | id) -1"))),
       data = train_data, 
@@ -35,27 +35,27 @@ fit_model <- function (pid, formula, data) {
   pred.glmer <- predict(mod.glmer, newdata = test_data, 
                         allow.new.levels = TRUE)
   
-  mixed <- lqmm(fixed = as.formula(paste("moca_score ~",
+  mixed <- lqmm(fixed = as.formula(paste("moca.score ~",
                                          formula, "+ moca_baseline", -1)),
                 random = ~ 1, group = id,
                 data = train_data, tau = 0.5, nK = 11, type = "normal",
                 na.action = na.omit)
   
   ###using the modified function
-  pred.lqmm <- predict.lqmm.modified(mixed, newdata = test_data, level = 0)
+  pred.lqmm <- predict_lqmm_modified(mixed, newdata = test_data, level = 0)
   
   # rmse.fixed.ef <- RMSE(rbind(pred.lqmm.fixef), cbind(data[data$id==pid,"moca.score"])) %>% round(3)
   # rmse.raef <- RMSE(rbind(pred.lqmm.raef), cbind(data[data$id==pid,"moca.score"])) %>% round(3)
-  rmse.glmer <- RMSE(pred.glmer, as.matrix(data[data$id==pid,"moca_score_gamma"])) %>% round(3)
-  rmse.lqmm <- RMSE(pred.lqmm, as.matrix(data[data$id==pid,"moca_score"])) %>% round(3)
+  rmse.glmer <- RMSE(pred.glmer, as.matrix(data[data$id==pid,"moca.score.gamma"])) %>% round(3)
+  rmse.lqmm <- RMSE(pred.lqmm, as.matrix(data[data$id==pid,"moca.score"])) %>% round(3)
   
   out <- data.frame(formula = formula,
                     rmse.glmer = rmse.glmer,
                     rmse.lqmm = rmse.lqmm,
-                    observed.gamma = as.matrix(data[data$id==pid,"moca_score_gamma"]) %>% 
+                    observed.gamma = as.matrix(data[data$id==pid,"moca.score.gamma"]) %>% 
                       paste(collapse = ", "),
                     predicted.gamma = pred.glmer %>% round (3) %>% paste(collapse = ", "),
-                    observed.lqmm = as.matrix(data[data$id==pid,"moca_score"]) %>% 
+                    observed.lqmm = as.matrix(data[data$id==pid,"moca.score"]) %>% 
                       paste(collapse = ", "),
                     predicted.lqmm = pred.lqmm %>% round (3) %>% 
                       paste(collapse = ", "),
