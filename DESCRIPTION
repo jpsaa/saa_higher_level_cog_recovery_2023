@@ -1,0 +1,40 @@
+Type: Compendium
+Package: saa_cog_recovery_2020
+Title: Trajectory and factors impacting cognitive recovery
+Version: 0.0.1
+Authors@R: c(
+    person(given = "Juan Pablo",
+           family = "Saa",
+           role = c("aut", "cre"),
+           email = "saajp@outlook.com",
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+    person(given = "Tamara", family = "Tse", role = "aut"),
+    person(given = "Carolyn", family = "Baum", role = "aut"),
+    person(given = "David", amily = "Uribe", role = "aut"),
+    person(given = "Saras", family = "Windecker", role = "aut"),
+    person(given = "Leeanne", family = "Carey", role = "aut")
+    )
+Description: This repository contains code needed to reproduce the article: Saa JP, Tse T, Baum C, Uribe D, Windecker S, Carey T. "Trajectory and factors impacting cognitive recovery", (in prep).
+License: MIT + file license
+Depends: 
+    asht,
+    dataPreparation,
+    dplyr,
+    extrafont,
+    ggplot2,
+    ggraph, 
+    hrbrthemes,
+    igraph,
+    lme4,
+    lqmm,
+    optimx,
+    plyr,
+    psych,
+    purrr,
+    quantreg,
+    R.utils,
+    RColorBrewer,
+    reshape2
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
