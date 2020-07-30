@@ -10,7 +10,7 @@ prepare_moca_long <- function (data,
   names(moca.long) <- c("id", "time", "moca.score")
   levels(moca.long$time) <- c("3-7 days", "3 months", "12 months")
   moca.long <- data.frame(moca.long,
-                          data %>% select(all_of(selected_variables)))
+                          data %>% select(selected_variables))
   
   moca.long <- moca.long[order(moca.long$id), ]
   

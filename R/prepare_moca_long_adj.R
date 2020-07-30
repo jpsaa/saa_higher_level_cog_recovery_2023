@@ -9,7 +9,7 @@ prepare_moca_long_adj <- function (data,
   levels(moca.long.adj$time) <- c("90 days", "365 days")
   moca.long.adj <- data.frame(moca.long.adj,
                               data %>%
-                                select(all_of(selected_variables), 
+                                select(selected_variables, 
                                        moca_score_w1))
   
   names(moca.long.adj)[grep("moca_score_w1", 
