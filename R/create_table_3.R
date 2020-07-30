@@ -3,7 +3,7 @@ create_table_3 <- function (data,
                             columns) {
   
   t3 <- data %>% 
-    select(all_of(columns)) %>% 
+    select(columns) %>% 
     group_by(trends) %>%
     summarise_if(is.numeric, 
                  list(~ sum(., na.rm = TRUE), 

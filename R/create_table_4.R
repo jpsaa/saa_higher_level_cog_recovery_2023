@@ -7,7 +7,7 @@ create_table_4 <- function (data,
     filter(trends == "1.overall improver" | 
              trends == "3.improved-declined") %>%
     select(trends, gender_w1, educ_binary, 
-           marital_status_binary_w1, disab_prestroke, all_of(columns))
+           marital_status_binary_w1, disab_prestroke, columns)
   
   sga.desc <- sga %>% 
     group_by(trends) %>%
@@ -98,7 +98,7 @@ create_table_4 <- function (data,
     filter(trends == "1.overall improver" | 
              trends == "9.overall decliner") %>%
     select(trends, gender_w1, educ_binary, 
-           marital_status_binary_w1, disab_prestroke, all_of(columns))
+           marital_status_binary_w1, disab_prestroke, columns)
   
   sga.desc <- sga2 %>% 
     group_by(trends) %>%

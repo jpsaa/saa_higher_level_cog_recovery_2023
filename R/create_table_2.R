@@ -1,21 +1,21 @@
 # moca over time
-create_table_2 <- function (all.moca) {
+create_table_2 <- function (data) {
 
   ### calculating descriptive statistics for moca domains
-  moca.w1 <- all.moca %>% 
+  moca.w1 <- data %>% 
     select(grep("moca_score|_total", names(.))) %>%
     select(grep("_w1", names(.))) %>% 
     describe(IQR = TRUE) %>%
     select(n, median, IQR)
   
-  moca.mo3 <- all.moca %>% 
+  moca.mo3 <- data %>% 
     select(grep("moca_score|_total", names(.))) %>%
     select(grep("_mo3", names(.))) %>% 
     select(-grep("total_", names(.))) %>% 
     describe(IQR = TRUE) %>%
     select(n, median, IQR)
   
-  moca.mo12 <- all.moca %>% 
+  moca.mo12 <- data %>% 
     select(grep("moca_score|_total", names(.))) %>%
     select(grep("_mo12", names(.))) %>% 
     select(-grep("total_", names(.))) %>%
@@ -42,14 +42,14 @@ create_table_2 <- function (all.moca) {
   
   ### loop below takes really really long
   for (i in seq_along(rownames(moca.w1))) {
-    pratt1[[i]] <- wsrTest(all.moca[, which(names(all.moca) == rownames(moca.w1)[i])],
-                           all.moca[, which(names(all.moca) == rownames(moca.mo3)[i])])
+    pratt1[[i]] <- wsrTest(data[, which(names(data) == rownames(moca.w1)[i])],
+                           data[, which(names(data) == rownames(moca.mo3)[i])])
     
-    pratt2[[i]] <- wsrTest(all.moca[, which(names(all.moca) == rownames(moca.mo3)[i])],
-                           all.moca[, which(names(all.moca) == rownames(moca.mo12)[i])])
+    pratt2[[i]] <- wsrTest(data[, which(names(data) == rownames(moca.mo3)[i])],
+                           data[, which(names(data) == rownames(moca.mo12)[i])])
     
-    pratt3[[i]] <- wsrTest(all.moca[, which(names(all.moca) == rownames(moca.w1)[i])],
-                           all.moca[, which(names(all.moca) == rownames(moca.mo12)[i])])
+    pratt3[[i]] <- wsrTest(data[, which(names(data) == rownames(moca.w1)[i])],
+                           data[, which(names(data) == rownames(moca.mo12)[i])])
     
     table2[i, "p-value 1"] <- round(as.numeric(pratt1[[i]]["p.value"]), 3)
     table2[i, "z-val.1 (95% CI)"] <- 
