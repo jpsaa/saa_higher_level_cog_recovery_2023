@@ -70,9 +70,9 @@ create_fig_2 <- function (moca, all.moca) {
     theme_ipsum(axis_text_size = 9) +
     theme(legend.position = "bottom",
           legend.text = element_text(size = 8),
-          plot.title = element_text(family = "Tahoma",
-                                    face = "bold",hjust = 0.5, size = 12),
-          text = element_text(family = "Tahoma", angle = 0, vjust = 0),
+          plot.title = element_text(family = "Palatino",
+                                    face = "bold", hjust = 0.5, size = 12),
+          text = element_text(family = "Palatino", angle = 0, vjust = 0),
           legend.title = element_text(colour = "gray10",size = 8),
           axis.line = element_line(size = 1, colour = "grey100"),
           # axis.ticks.x = element_line(size = 1)
