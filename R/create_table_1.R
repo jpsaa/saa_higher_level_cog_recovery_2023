@@ -1,8 +1,16 @@
-create_table_1 <- function (all, all.moca, 
-                           moca.base, moca.incomp) {
+create_table_1 <- function (data) {
+  
+  #### Datasets for baseline, complete, incomplete, and no moca
+  all.moca <- data %>% 
+    dplyr::filter (!is.na(moca_score_w1) & !is.na(moca_score_mo3) & !is.na(moca_score_mo12))
+  moca.base <- data %>% 
+    dplyr::filter (!is.na(moca_score_w1))
+  moca.incomp <- moca.base %>% 
+    dplyr::filter (is.na(moca_score_w1) | is.na(moca_score_mo3) | is.na(moca_score_mo12))
+  # no.moca = data%>% dplyr::filter (is.na(moca_score_w1) | is.na(moca_score_mo3) | is.na(moca_score_mo12))
   
   # continuous variables
-  .cont.vars <- all %>% 
+  .cont.vars <- data %>% 
     select(age_t0, nihss_score_w1, madrs_w1, 
            moca_score_w1, height_t0, weight_t0, 
            bmi_t0, systolic_bp_t0, diastolic_bp_t0,
@@ -37,17 +45,17 @@ table1_cont_vars <- function (all.moca, moca.base,
                               moca.incomp, .cont.vars) {
   
   all.base <- moca.base %>%
-    select(all_of(.cont.vars)) %>%
+    select(.cont.vars) %>%
     describe(IQR = TRUE) %>%
     select(n, median, IQR)
   
   comp.num <- all.moca %>%
-    select(all_of(.cont.vars)) %>%
+    select(.cont.vars) %>%
     describe(IQR = TRUE) %>%
     select(n, median, IQR)
   
   incomp.num <- moca.incomp %>%
-    select(all_of(.cont.vars)) %>%
+    select(.cont.vars) %>%
     describe(IQR = TRUE) %>%
     select(n, median, IQR)
   
@@ -106,7 +114,7 @@ table1_count_vars <- function (all.moca, moca.base,
   
   #### table comparing those with and without complete moca scores
   all.base <- moca.base %>%
-    select(all_of(.freqs)) %>%
+    select(.freqs) %>%
     summary() %>% 
     strsplit(":") %>% 
     data.frame() %>% 
@@ -116,7 +124,7 @@ table1_count_vars <- function (all.moca, moca.base,
   all.base <- all.base[-which(trimws(all.base[, 1]) == "NA's"), ]
   
   comp <- all.moca %>%
-    select(all_of(.freqs)) %>%
+    select(.freqs) %>%
     summary() %>% 
     strsplit(":") %>% 
     data.frame() %>% 
@@ -126,7 +134,7 @@ table1_count_vars <- function (all.moca, moca.base,
   comp <- comp[-which(trimws(comp[, 1]) == "NA's"), ]
   
   incomp <- moca.incomp %>%
-    select(all_of(.freqs)) %>%
+    select(.freqs) %>%
     summary() %>% 
     strsplit(":") %>% 
     data.frame() %>% 
