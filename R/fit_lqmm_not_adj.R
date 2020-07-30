@@ -3,14 +3,15 @@ fit_lqmm_not_adj <- function (moca.long) {
   mixed.vars <- names(moca.long)[-grep("id|moca.|time",
                                        names(moca.long))]
   
-  .stats <- lapply(mixed.vars, model_lqmm_not_adj) %>%
+  stats <- lapply(mixed.vars, model_lqmm_not_adj) %>%
     purrr::map_df(., bind_rows) %>%
     data.frame
   
-  # .stats <- data.frame(purrr::map_df(.stats, bind_rows))
-  out <- .stats %>% 
+  stats$p.value <- as.numeric(as.character(stats$p.value))
+  
+  out <- stats %>% 
     filter(p.value < .05) %>% 
-    mutate(p.value = ifelse(p.value!="" & p.value < 0.001, 
+    mutate(p.value = ifelse(p.value != "" & p.value < 0.001, 
                             "<.001", p.value))
 
 }

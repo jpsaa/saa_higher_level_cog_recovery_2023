@@ -13,7 +13,10 @@ collate_quantile_regressions <- function (data,
                                   response_variable = 'moca_score_mo12',
                                   other_variables = 'moca_score_w1')
   
-  qr <- rbind(w1, "", mo3, "", mo12) %>% 
+  qr <- rbind(w1, "", mo3, "", mo12) 
+  qr$p.value <- as.numeric(as.character(qr$p.value))
+  
+  qr_filtered <- qr %>% 
     filter(p.value < .05) %>% 
     mutate(p.value = ifelse(p.value != "" & p.value < 0.001, 
                             "<.001", p.value))
@@ -25,9 +28,9 @@ fit_quantile_regression <- function (data,
                                      other_variables = NULL) {
   
   subsetted_data <- data %>% 
-    select(all_of(response_variable),
-           all_of(selected_variables),
-           all_of(other_variables)) %>%
+    select(response_variable,
+           selected_variables,
+           other_variables) %>%
     na.omit()
   
   .stats <- lapply(names(subsetted_data)[-1],

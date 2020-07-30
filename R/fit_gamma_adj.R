@@ -1,16 +1,18 @@
 fit_gamma_adj <- function (data) {
   
   mixed.vars <- names(data)[-grep("id|moca.|time",
-                                                 names(data))]
+                                  names(data))]
   
-  .stats <- lapply(mixed.vars, model_gamma_adj, data)
+  stats <- lapply(mixed.vars, model_gamma_adj, data) %>%
+    purrr::map_df(., bind_rows) %>%
+    data.frame
   
-  .stats <- data.frame(purrr::map_df(.stats, bind_rows))
+  stats$p.value <- as.numeric(as.character(stats$p.value))
   
-  .stats %>% 
+  out <- stats %>% 
     filter(p.value < .05) %>% 
-    mutate(p.value = ifelse(p.value!="" & 
-                              p.value < 0.001, "<.001", p.value))
+    mutate(p.value = ifelse(p.value != "" & p.value < 0.001, 
+                            "<.001", p.value))
   
 }
 
@@ -22,8 +24,8 @@ model_gamma_adj <- function (var, data) {
     data = data,
     family = Gamma(link = "identity"),
     control = glmerControl(optimizer = "optimx",
-                         optCtrl = list(method = "nlminb",
-                                        maxit = 1e9)))
+                           optCtrl = list(method = "nlminb",
+                                          maxit = 1e9)))
   stats <- summary(mixed)$coefficients
   pos <- grep(var, rownames(stats))
   
