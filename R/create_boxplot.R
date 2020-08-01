@@ -1,5 +1,11 @@
 create_boxplot <- function (data) {
   
+  cors <- plyr::ddply(data, c("formula", "model.time"), 
+                      summarise, 
+                      cor = round(cor(observed, predicted, 
+                                      method = "pearson",
+                                      use = "complete.obs"), 3))
+  
   #### Graphing values
   # Define the number of colors you want
   nb.cols <- nlevels(data$formula)
