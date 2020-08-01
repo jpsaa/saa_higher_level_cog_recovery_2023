@@ -1,198 +1,122 @@
-#### Table 4 - overall improvers and improved declined
-
+### Table 4
 create_table_4 <- function (data,
                             columns) {
- 
-  sga <- data %>% 
-    filter(trends == "1.overall improver" | 
-             trends == "3.improved-declined") %>%
-    select(trends, gender_w1, educ_binary, 
-           marital_status_binary_w1, disab_prestroke, columns)
   
-  sga.desc <- sga %>% 
+  t4 <- data %>% 
+    select(columns) %>% 
     group_by(trends) %>%
     summarise_if(is.numeric, 
-                 funs(sum(!is.na(.)), median, IQR),
-                 na.rm = TRUE)
+                 list(~ sum(., na.rm = TRUE), 
+                      ~ median(., na.rm = TRUE), 
+                      ~ IQR(., na.rm = TRUE)))
   
-  counts <- names(sga.desc)[grep("_sum", names(sga.desc))]
-  medians <- names(sga.desc)[grep("median", names(sga.desc))]
-  iqrs <- names(sga.desc)[grep("IQR", names(sga.desc))]
-  
-  table4 <- matrix(nrow = nrow(sga.desc))
+  ### getting descriptive stats for all variables
+  counts <- names(t4)[grep("sum", names(t4))]
+  medians <- names(t4)[grep("median", names(t4))]
+  iqrs <- names(t4)[grep("IQR", names(t4))]
+  table4 <- matrix(nrow = nrow(t4))
   
   for (i in seq_along(medians)) {
     
     #### looking for NA values and turning them into spaces
-    .counts <- which(names(sga.desc) == counts[i])
-    .med <- which(names(sga.desc) == medians[i])
-    .iqr <- which(names(sga.desc) == iqrs[i])
+    .counts <- which(names(t4) == counts[i])
+    .med <- which(names(t4) == medians[i])
+    .iqr <- which(names(t4) == iqrs[i])
     
     table4 <- cbind(
-      table4, 
+      table4,
       cbind(
-        paste0(
-          round(as.numeric(unlist(sga.desc[, .counts])), 2), ", ",
-          round(as.numeric(unlist(sga.desc[, .med])), 2), 
-          " (", 
-          paste0(round(as.numeric(unlist(sga.desc[, .iqr])), 2), 
-                 ")"))))
+        paste0(round(as.numeric(unlist(t4[, .counts])), 2), ", ",
+               round(as.numeric(unlist(t4[, .med])), 2), " (",
+               paste0(round(as.numeric(unlist(t4[, .iqr])), 2), ")"))))
     table4[grep("NA", table4[, i + 1]), i + 1] = ""
     
   }
   
   table4 <- table4[, -1]
   table4 <- t(table4)
-  colnames(table4) <- levels(factor(sga$trends))
   
-  #### applying wilcoxon test accross all columns and groupping by trend (overall improver and improver declined)
-  cols <- sga %>% 
-    select(-grep("gender|trends|educ_|marital_|disab_pres", 
-                 names(.))) %>% 
-    names
-  
-  sigs <- list()
-  c1 <- c("Variable", "z-value 1", "95% CI 1", "p-value 1")
-  .tests <- matrix(ncol = length(c1), 
-                nrow = length(cols))
-  colnames(.tests) <- c1
-  
-  for(i in seq_along(cols)) {
-    sigs[[i]] <- wilcox_test(
-      sga[, which(names(sga) == cols[i])] ~ factor(trends), 
-      data = sga, 
-      distribution = "exact", 
-      zero.method = "Pratt", 
-      conf.int = TRUE
-    )
-    
-    .tests[i, "Variable"] <- cols[i]
-    .tests[i, "z-value 1"] <- round(statistic(sigs[[i]]), 3)
-    .tests[i, "95% CI 1"] <- paste0(
-      round(confint(sigs[[i]])$conf.int[1], 3), ", ", 
-      round(confint(sigs[[i]])$conf.int[2], 3))
-    .tests[i, "p-value 1"] <- round(pvalue(sigs[[i]]), 3)
-    
-  }
-  
-  table4 <- cbind(.tests[, "Variable"], table4, 
-                  .tests[, -which(colnames(.tests) == "Variable")])
-  
-  #### adding count variables
   table4 <- rbind(
-    c("n", get_stats(sga, gender_w1), "", "", ""), 
-    t(c("males", get_stats(sga, gender_w1, "male"),
-        fisher.stats(sga, gender_w1) %>% unname)),
-    t(c("education", get_stats(sga, educ_binary, "secondary or more"), 
-        fisher.stats(sga, educ_binary))),
-    t(c("marital status", get_stats(sga, marital_status_binary_w1, "married"), 
-        fisher.stats(sga, marital_status_binary_w1) %>% unname)), 
-    t(c("prestroke disab", get_stats(sga, disab_prestroke, "some disab"), 
-        fisher.stats(sga, disab_prestroke) %>% unname)), 
+    get_stats(data, id),
+    get_stats(data, gender_w1, "male"),
+    get_stats(data, educ_binary, "secondary or more"),
+    get_stats(data, marital_status_binary_w1, "married"),
+    get_stats(data, disab_prestroke, "some disab"),
     table4)
+  colnames(table4) <- unlist(t4[, 1])
   
-  table4[, 1] <- trimws(gsub("median|t0|.y|_", " ", table4[, 1]))
+  ####rownames
+  table4 <- cbind(Variable = c(
+    "n (%)", "Males (%)", "Education",
+    "Marital status", "mrs prestroke",
+    trimws(gsub("median|t0|.y|_", " ", medians))
+  ), table4)
   
-  ##### comparison overall improver vs overall decliner
-  sga2 <- data %>% 
-    filter(trends == "1.overall improver" | 
-             trends == "9.overall decliner") %>%
-    select(trends, gender_w1, educ_binary, 
-           marital_status_binary_w1, disab_prestroke, columns)
+  ### creating space between assessments
+  cols <- c("stolic bp", 'moca', 'mmse', 'stroop',
+            "ravens", 'time taken', 'lds', 'madrs',
+            'nihss', 'barthel', 'mrs score', 
+            'aerobic', 'acs', 'wsas', 'sis')
+  .t4 <- matrix(ncol = ncol(table4))
   
-  sga.desc <- sga2 %>% 
-    group_by(trends) %>%
-    summarise_if(is.numeric, 
-                 funs(sum(!is.na(.)), median, IQR), 
-                 na.rm = TRUE)
+  grab <- 1
   
-  counts <- names(sga.desc)[grep("_sum", names(sga.desc))]
-  medians <- names(sga.desc)[grep("median", names(sga.desc))]
-  iqrs <- names(sga.desc)[grep("IQR", names(sga.desc))]
-  
-  .table4 <- matrix(nrow = nrow(sga.desc))
-  
-  for (i in seq_along(medians)) {
+  for (i in seq_along(cols)) {
     
-    #### looking for NA values and turning them into spaces
-    .counts <- which(names(sga.desc) == counts[i])
-    .med <- which(names(sga.desc) == medians[i])
-    .iqr <- which(names(sga.desc) == iqrs[i])
-    .table4 <- cbind(
-      .table4, 
-      cbind(
-        paste0(
-          round(as.numeric(unlist(sga.desc[, .counts])), 2), ", ", 
-          round(as.numeric(unlist(sga.desc[, .med])), 2), 
-          " (", 
-          paste0(round(as.numeric(unlist(sga.desc[, .iqr])), 2), 
-                 ")"))))
-    .table4[grep("NA", .table4[, i+1]), i+1] <- ""
+    space <- first(grep(cols[i], table4[, 1])) - 1
+    .t4 <- rbind(.t4, table4[grab:space, ], "")
+    grab <- first(grep(cols[i], table4[, 1]))
     
   }
   
-  .table4 <- .table4[, -1]
-  .table4 <- t(.table4)
-  colnames(.table4) <- levels(factor(sga2$trends))
-  
-  #### applying wilcoxon test accross all columns and groupping by trend (overall improver and improver declined)
-  sigs <- list()
-  c1 <- c("Variable", "z-value 2", "95% CI 2", "p-value 2")
-  .tests <- matrix(ncol = length(c1), 
-                nrow = length(cols))
-  colnames(.tests) <- c1
-  
-  for(i in seq_along(cols)) {
-    sigs[[i]] <- wilcox_test(
-      sga2[, which(names(sga2) == cols[i])] ~ factor(trends), 
-      data = sga2, 
-      distribution = "exact", zero.method = "Pratt", conf.int = TRUE
-    )
-    .tests[i, "Variable"] <- cols[i]
-    .tests[i, "z-value 2"] <- round(statistic(sigs[[i]]), 3)
-    .tests[i, "95% CI 2"] <- paste0(round(confint(sigs[[i]])$conf.int[1], 3), ", ", 
-                                round(confint(sigs[[i]])$conf.int[2], 3))
-    .tests[i, "p-value 2"] <- round(pvalue(sigs[[i]]), 3)
-    
-  }
-  
-  .tests <- cbind(.tests[, "Variable"], .table4, 
-                  .tests[, -which(colnames(.tests) == "Variable")])
-  
-  #### adding count variables
-  .tests <- rbind(
-    c("n", get_stats(sga2, gender_w1), "", "", ""), 
-    t(c("males", get_stats(sga2, gender_w1, "male"),
-        fisher.stats(sga2, gender_w1) %>% unname)),
-    t(c("education", get_stats(sga2, educ_binary, "secondary or more"), 
-        fisher.stats(sga2, educ_binary))),
-    t(c("marital status", get_stats(sga2, marital_status_binary_w1, "married"), 
-        fisher.stats(sga2, marital_status_binary_w1) %>% unname)), 
-    t(c("prestroke disab", get_stats(sga2, disab_prestroke, "some disab"), 
-        fisher.stats(sga2, disab_prestroke) %>%unname)), 
-    .tests)
-  
-  table4 <- cbind(table4, .tests[, 3:6])
-  colnames(table4)[which(colnames(table4) == "")] <- 
-    c("variables", "1.overall improver", "3.improved-declined", "9.overall decliner")
-  
-  table4 <- apply(table4, 2, as.character)
-  
+  #### adding the last category
+  .t4 <- rbind(.t4[-1, ], 
+               table4[grep("sis", table4[, 1]), ])
+
 }
 
-#### count data values
-fisher.stats <- function(x, var){
-  calc <- x %>% 
-    select(trends, {{var}}) %>% 
-    group_by(trends) %>%
-    table() %>% 
-    t() %>% 
-    fisher.test()
-  est <- unname(round(calc$estimate, 3))
-  lb <- round(calc$conf.int[1], 3)
-  ub <- round(calc$conf.int[2], 3)
-  p <- round(calc$p.value, 3)
-  tibble(`z-value` = est, 
-         `95% CI` = paste0(lb, ", ", ub),
-         `p-value` = p)
+##### binding count variable stats
+get_stats <- function (x, var, categ = NULL) {
+  
+  if (!is.null(categ)) {
+    ### mapping zeroes
+    miss <- cbind(x %>% select(trends), 
+                  (x %>% select({{var}})) == {{categ}}) %>% 
+      table %>%
+      data.frame() %>% 
+      filter({{var}} == TRUE, Freq == 0) %>% 
+      select(trends, Freq)
+    
+    names(miss) <- c("trends","categ")
+    
+    #### getting values
+    .nums <- x %>% 
+      filter({{var}} == {{categ}}) %>%
+      group_by(trends) %>% 
+      summarize(categ = n()) %>% 
+      rbind(miss) %>%
+      arrange(trends) %>% 
+      select(categ) %>% 
+      unlist
+    
+    paste0(.nums, ' (', 
+           round(.nums / nrow(x) * 100, 2),
+           "%)")
+    
+  } else {
+    
+    paste0(
+      x %>% 
+        group_by(trends) %>% 
+        select(trends) %>%
+        summarize(var = n()) %>% 
+        select(var) %>% 
+        unlist(),
+      " (",
+      round(
+        ((x %>% group_by(trends) %>% select(trends) %>%
+            summarize(var = n()) %>% select(var) %>% 
+            unlist()) / nrow(x)) * 100, 2),
+      "%)")
+  }
 }
