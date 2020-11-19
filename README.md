@@ -1,15 +1,15 @@
-# Trajectory and factors impacting cognitive recovery
+# Trajectory and factors impacting cognitive recovery in the first year after stroke
 
 This repository contains code needed to reproduce the article:
 
-**Saa JP, Tse T, Baum C, Uribe D, Windecker S, Carey T**. "Trajectory and factors impacting cognitive recovery", (in prep).
+**Saa JP, Tse T, Baum C, Uribe D, Windecker S, Ma H, Davis S, Donnan G, Carey T**. "Trajectory and factors impacting cognitive recovery in the first year after stroke", (submitted to *Neurology*).
 
-This badge doesn't function yet, but if you preserve the data somewhere, we can add it here. 
+Badge to pull data (non-functional; will be added some time in the future when data becomes public). 
 [![DOI](https://zenodo.org/badge/11128/RemkoDuursma/baadanalysis.svg)](https://zenodo.org/badge/latestdoi/11128/RemkoDuursma/baadanalysis)
 
 ## Running the code
 
-All analyses were done in `R`. All code needed to reproduce the submitted products is included in this repository. To reproduce the results in this paper, run the code contained in the `analysis.R` file. Figures, tables, and other results will be output to respective directories and the paper and supplementary materials can be found in the directory `ms`.
+All analyses were done in `R`. All code needed to reproduce the submitted manuscript is included in this repository. To reproduce the results in this study, run the code contained in the `analysis.R` file. Figures, tables, and other results will be output to respective directories. Supplementary materials can be found in the directory `ms`.
 
 If you are reproducing these results on your own machine, first download the code and then install the required packages listed in the `DESCRIPTION` file. This can be achieved by opening the Rstudio project and running:
 
@@ -22,7 +22,7 @@ You can access an interactive RStudio session with the required software pre-ins
 
 [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/smwindecker/saa_cog_recovery_2020/master?urlpath=rstudio)
 
-To ensure long-term [computational reproducibility](https://www.britishecologicalsociety.org/wp-content/uploads/2017/12/guide-to-reproducible-code.pdf) of this work, we have created a [Docker](http://dockerhub.com) image to enable others to reproduce these results on their local machines using the same software and versions we used to conduct the original analysis. Instructions for reproducing this work using the docker image are available at the bottom of the page. 
+To ensure long-term [computational reproducibility](https://www.britishecologicalsociety.org/wp-content/uploads/2017/12/guide-to-reproducible-code.pdf) of this work, we have created a [Docker](http://dockerhub.com) image to enable others to reproduce these results on their local machines using identical software (and versions) we used to conduct the original analysis. Instructions for reproducing this work using the docker image are available at the bottom of this page. 
 
 ## Material included in the repository include:
 
@@ -38,16 +38,16 @@ To ensure long-term [computational reproducibility](https://www.britishecologica
 
 If you have Docker installed, you can recreate the computing environment as follows in the terminal. 
 
-From the directory you'd like this repo saved in, clone the repository:
+From the directory you would like this repository saved in, clone the repository:
 
 ```
-git clone https://github.com/smwindecker/saa_cog_recovery_2020.git
+git clone https://github.com/jpsaa/saa_cog_recovery_2020.git
 ```
 
 Then fetch the container:
 
 ```
-docker pull smwindecker/saa_cog_recovery_2020
+docker pull jpsaa/saa_cog_recovery_2020
 ```
 
 Navigate to the downloaded repo, then launch the container using the following code (it will map your current working directory inside the docker container): 
@@ -56,7 +56,7 @@ Navigate to the downloaded repo, then launch the container using the following c
 docker run --user root -v $(pwd):/home/rstudio/ -p 8787:8787 -e DISABLE_AUTH=true smwindecker/saa_cog_recovery_2020
 ```
 
-The code above initialises a docker container, which runs an RStudio session accessed by pointing your browser to [localhost:8787](http://localhost:8787). For more instructions on running docker, see the info from [rocker](https://hub.docker.com/r/rocker/rstudio).
+The code above initialises a docker container, which runs an RStudio session accessed by pointing your browser to [localhost:8787](http://localhost:8787). For more instructions on running docker, see detailed info from [rocker](https://hub.docker.com/r/rocker/rstudio).
 
 ### NOTE: Building the docker image
 
@@ -66,5 +66,5 @@ For posterity, the docker image was built off [`rocker/verse:3.5.1` container](h
 docker build -t smwindecker/saa_cog_recovery_2020 .
 ```
 
-and was then pushed to [dockerhub](https://cloud.docker.com/u/smwindecker/repository/docker/smwindecker/saa_cog_recovery_2020). The image used by binder builds off this container, adding extra features needed by binder, as described in [rocker/binder](https://hub.docker.com/r/rocker/binder/dockerfile).
+and was then pushed to [dockerhub](https://cloud.docker.com/u/smwindecker/repository/docker/jpsaa/saa_cog_recovery_2020). The image used by binder builds off this container, adding extra features needed by binder, as described in [rocker/binder](https://hub.docker.com/r/rocker/binder/dockerfile).
 
