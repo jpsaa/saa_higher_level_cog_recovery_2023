@@ -63,7 +63,7 @@ The code above initialises a docker container, which runs an RStudio session acc
 For posterity, the docker image was built off [`rocker/verse:3.5.1` container](https://hub.docker.com/r/rocker/verse) via the following command, in a terminal contained within the downloaded repo:
 
 ```
-docker build -t smwindecker/saa_cog_recovery_2020 .
+docker build -t jpsaa/saa_cog_recovery_2020 .
 ```
 
 and was then pushed to [dockerhub](https://cloud.docker.com/u/smwindecker/repository/docker/jpsaa/saa_cog_recovery_2020). The image used by binder builds off this container, adding extra features needed by binder, as described in [rocker/binder](https://hub.docker.com/r/rocker/binder/dockerfile).
