@@ -1,4 +1,4 @@
-# Trajectory and factors impacting cognitive recovery in the first year after stroke
+# Mapping higher-level cognition in the first year post-stroke across countries
 
 This repository contains code needed to reproduce the article:
 
