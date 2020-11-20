@@ -3,23 +3,18 @@ Package: saa_cog_recovery_2020
 Title: Trajectory and factors impacting cognitive recovery
 Version: 0.0.1
 Authors@R: c(
-    person(given = "Juan Pablo", 
+    person(given = "Juan Pablo",
            family = "Saa",
            role = c("aut", "cre"),
            email = "saajp@outlook.com",
            comment = c(ORCID = "YOUR-ORCID-ID")),
-    person(given = "Gerald", family = "Koh", role = "aut"),
-    person(given = "Philip", family = "Yap", role = "aut"),
     person(given = "Tamara", family = "Tse", role = "aut"),
     person(given = "Carolyn", family = "Baum", role = "aut"),
     person(given = "David", amily = "Uribe", role = "aut"),
     person(given = "Saras", family = "Windecker", role = "aut"),
-    person(given = "Henry", family = "Ma", role = "aut"),
-    person(given = "Stephen", family = "Davis", role = "aut"),
-    person(given = "Geoffrey", family = "Donnan", role = "aut"),
     person(given = "Leeanne", family = "Carey", role = "aut")
     )
-Description: This repository contains code needed to reproduce the article: Saa JP, Koh G, Yap P, Tse T, Baum C, Uribe D, Windecker S, Ma H, Davis S, Donnan G, Carey T. "Trajectory and factors impacting cognitive recovery", (in prep).
+Description: This repository contains code needed to reproduce the article: Saa JP, Tse T, Baum C, Uribe D, Windecker S, Carey T. "Trajectory and factors impacting cognitive recovery", (in prep).
 License: MIT + file license
 Depends: 
     asht,
