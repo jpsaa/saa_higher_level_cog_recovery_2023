@@ -1,6 +1,6 @@
 FROM rocker/verse:3.5.1
-LABEL maintainer="Saras Windecker"
-LABEL email="saras.windecker@gmail.com"
+LABEL maintainer="Juan Pablo Saa"
+LABEL email="saajp@outlook.com"
 
 # Install major libraries
 RUN    apt-get update \
