@@ -1,8 +1,8 @@
-# Trajectory and factors impacting cognitive recovery in the first year after stroke
+# Trajectory and factors impacting higher-level cognitive recovery in the first year after stroke
 
 This repository contains code needed to reproduce the article:
 
-**Saa JP, Koh G, Yap P, Tse T, Baum C, Uribe D, Windecker S, Ma H, Davis S, Donnan G, Carey T**. "Mapping higher-level cognition in the first year
+**Saa JP, Koh G, Yap P, Tse T, Baum C, Uribe DE, Windecker SM, Ma H, Davis S, Donnan G, Carey LM**. "Mapping higher-level cognition in the first year
 post-stroke across countries", (submitted to *NNR*).
 
 Badge to pull data (non-functional; will be added some time in the future when data becomes public). 
