@@ -3,7 +3,7 @@
 This repository contains code needed to reproduce the article:
 
 **Saa JP, Koh G, Yap P, Tse T, Baum C, Uribe D, Windecker S, Ma H, Davis S, Donnan G, Carey T**. "Mapping higher-level cognition in the first year
-post-stroke across countries", (submitted to *Journal*).
+post-stroke across countries", (submitted to *NNR*).
 
 Badge to pull data (non-functional; will be added some time in the future when data becomes public). 
 [![DOI](https://zenodo.org/badge/11128/RemkoDuursma/baadanalysis.svg)](https://zenodo.org/badge/latestdoi/11128/RemkoDuursma/baadanalysis)
@@ -54,7 +54,7 @@ docker pull jpsaa/saa_higher_level_cog_recovery_2023
 Navigate to the downloaded repo, then launch the container using the following code (it will map your current working directory inside the docker container): 
 
 ```
-docker run --user root -v $(pwd):/home/rstudio/ -p 8787:8787 -e DISABLE_AUTH=true jpsaa/saa_higher_level_cog_recovery_2020
+docker run --user root -v $(pwd):/home/rstudio/ -p 8787:8787 -e DISABLE_AUTH=true jpsaa/saa_higher_level_cog_recovery_2023
 ```
 
 The code above initialises a docker container, which runs an RStudio session accessed by pointing your browser to [localhost:8787](http://localhost:8787). For more instructions on running docker, see detailed info from [rocker](https://hub.docker.com/r/rocker/rstudio).
